@@ -35,6 +35,17 @@ function precioConDescuento(p) {
   return p.precio;
 }
 
+// --- Devuelve la lista de imágenes de un producto (compatible con productos viejos) ---
+function obtenerImagenes(p) {
+  if (p.imagenes && p.imagenes.length > 0) {
+    return p.imagenes;
+  }
+  if (p.imagen) {
+    return [p.imagen];
+  }
+  return [];
+}
+
 // --- Dibuja las tarjetas de productos (respetando el filtro) ---
 function mostrarProductos() {
   const galeria = document.getElementById("galeria");
@@ -216,20 +227,26 @@ function mostrarNuevos() {
 }
 
 // =========================================
-//  MODAL DE PRODUCTO (ventana grande)
+//  MODAL DE PRODUCTO (ventana grande con galería)
 // =========================================
 let productoModalActual = null;
+let imagenesModal = [];
+let indiceImagenActual = 0;
 
 function abrirModalProducto(id) {
   const p = PRODUCTOS.find(function (prod) { return prod.id === id; });
   if (!p) return;
 
   productoModalActual = p;
+  imagenesModal = obtenerImagenes(p);
+  indiceImagenActual = 0;
+
   const tieneOferta = p.descuento && p.descuento > 0;
   const precioFinal = precioConDescuento(p);
 
-  document.getElementById("modal-foto").src = p.imagen;
-  document.getElementById("modal-foto").alt = p.nombre;
+  // Dibujamos la galería (foto grande + flechitas + miniaturas)
+  dibujarGaleriaModal();
+
   document.getElementById("modal-nombre").textContent = p.nombre;
 
   const precioDiv = document.getElementById("modal-precio");
@@ -278,11 +295,72 @@ function abrirModalProducto(id) {
   modal.classList.add("flex");
 }
 
+// --- Dibuja la foto grande, las flechitas y las miniaturas ---
+function dibujarGaleriaModal() {
+  const fotoGrande = document.getElementById("modal-foto");
+  const miniaturas = document.getElementById("modal-miniaturas");
+  const flechaIzq = document.getElementById("modal-flecha-izq");
+  const flechaDer = document.getElementById("modal-flecha-der");
+
+  if (imagenesModal.length === 0) {
+    fotoGrande.src = "";
+    if (miniaturas) miniaturas.innerHTML = "";
+    return;
+  }
+
+  // Foto grande = la del índice actual
+  fotoGrande.src = imagenesModal[indiceImagenActual];
+  fotoGrande.alt = productoModalActual ? productoModalActual.nombre : "";
+
+  // Flechitas: solo se muestran si hay más de una foto
+  const hayVarias = imagenesModal.length > 1;
+  if (flechaIzq) flechaIzq.style.display = hayVarias ? "flex" : "none";
+  if (flechaDer) flechaDer.style.display = hayVarias ? "flex" : "none";
+
+  // Miniaturas
+  if (miniaturas) {
+    if (hayVarias) {
+      miniaturas.innerHTML = "";
+      imagenesModal.forEach(function (url, indice) {
+        const activa = indice === indiceImagenActual;
+        miniaturas.innerHTML += `
+          <img src="${url}" onclick="elegirImagenModal(${indice})"
+            style="width: 64px; height: 64px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 2px solid ${activa ? 'var(--color-cuero)' : 'transparent'}; opacity: ${activa ? '1' : '0.7'};">
+        `;
+      });
+    } else {
+      miniaturas.innerHTML = "";
+    }
+  }
+}
+
+// --- Elegir una foto tocando su miniatura ---
+function elegirImagenModal(indice) {
+  indiceImagenActual = indice;
+  dibujarGaleriaModal();
+}
+
+// --- Pasar a la foto anterior ---
+function imagenAnterior() {
+  if (imagenesModal.length === 0) return;
+  indiceImagenActual = (indiceImagenActual - 1 + imagenesModal.length) % imagenesModal.length;
+  dibujarGaleriaModal();
+}
+
+// --- Pasar a la foto siguiente ---
+function imagenSiguiente() {
+  if (imagenesModal.length === 0) return;
+  indiceImagenActual = (indiceImagenActual + 1) % imagenesModal.length;
+  dibujarGaleriaModal();
+}
+
 function cerrarModalProducto() {
   const modal = document.getElementById("modal-producto");
   modal.classList.add("hidden");
   modal.classList.remove("flex");
   productoModalActual = null;
+  imagenesModal = [];
+  indiceImagenActual = 0;
 }
 
 // =========================================
@@ -421,11 +499,9 @@ function actualizarCarrito() {
     `;
   });
 
-  // Subtotal
   const subtotalEl = document.getElementById("carrito-subtotal");
   if (subtotalEl) subtotalEl.textContent = formatearPrecio(subtotal);
 
-  // Envío
   const envioEl = document.getElementById("carrito-envio");
   if (envioEl) {
     if (envioElegido === "") {
@@ -437,7 +513,6 @@ function actualizarCarrito() {
     }
   }
 
-  // Total (subtotal + envío)
   totalEl.textContent = formatearPrecio(subtotal + costoEnvio);
   contador.textContent = cantidadTotal;
 }
@@ -572,6 +647,7 @@ onSnapshot(consultaTienda, function (snapshot) {
       precio: p.precio,
       descripcion: p.descripcion,
       imagen: p.imagen,
+      imagenes: p.imagenes || null,
       stock: p.stock != null ? p.stock : 0,
       descuento: p.descuento || 0,
       etiquetas: p.etiquetas || []
@@ -595,6 +671,9 @@ window.abrirModalInfo = abrirModalInfo;
 window.cerrarModalInfo = cerrarModalInfo;
 window.calcularEnvio = calcularEnvio;
 window.elegirEnvio = elegirEnvio;
+window.elegirImagenModal = elegirImagenModal;
+window.imagenAnterior = imagenAnterior;
+window.imagenSiguiente = imagenSiguiente;
 
 // --- Arranca el carrito vacío ---
 actualizarCarrito();

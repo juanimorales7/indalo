@@ -345,8 +345,24 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2" style="max-height: 90vh;">
 
-        <div class="bg-[#E5DBCC] flex items-center justify-center">
-          <img id="modal-foto" src="" alt="" class="w-full h-full object-cover" style="min-height: 300px; max-height: 90vh;">
+        <div class="bg-[#E5DBCC] flex flex-col">
+          <!-- Foto grande con flechitas -->
+          <div class="relative flex-grow flex items-center justify-center" style="min-height: 300px;">
+            <img id="modal-foto" src="" alt="" class="w-full h-full object-cover" style="max-height: 70vh;">
+
+            <!-- Flecha izquierda -->
+            <button id="modal-flecha-izq" onclick="imagenAnterior()"
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full items-center justify-center text-white"
+              style="background: rgba(74,63,53,0.55); font-size: 22px; display: none;">‹</button>
+
+            <!-- Flecha derecha -->
+            <button id="modal-flecha-der" onclick="imagenSiguiente()"
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full items-center justify-center text-white"
+              style="background: rgba(74,63,53,0.55); font-size: 22px; display: none;">›</button>
+          </div>
+
+          <!-- Miniaturas -->
+          <div id="modal-miniaturas" class="flex gap-2 p-3 justify-center flex-wrap" style="background: #FBF8F2;"></div>
         </div>
 
         <div class="p-8 flex flex-col overflow-y-auto" style="max-height: 90vh;">
