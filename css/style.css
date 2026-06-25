@@ -1,0 +1,130 @@
+/* ================================
+   INDALO — Cestería Nórdica
+   Hoja de estilos base
+   ================================ */
+
+:root {
+  /* --- Fuentes --- */
+  --fuente-titulo: 'Playfair Display', serif;
+  --fuente-cuerpo: 'Lato', sans-serif;
+
+  /* --- Paleta de colores Indalo --- */
+  --color-fondo:       #F5F0E8; /* lino crema (fondo principal) */
+  --color-arena:       #E5DBCC; /* beige arena suave */
+  --color-cuerda:      #D4C3A8; /* tono cuerda natural */
+  --color-cobre:       #B07D52; /* cobre / terracota del logo */
+  --color-cuero:       #A1623C; /* marrón cuero (acentos, botones) */
+  --color-texto:       #4A3F35; /* marrón oscuro cálido (textos) */
+  --color-texto-suave: #8A7B6B; /* marrón grisáceo (subtítulos) */
+  --color-verde:       #8B9A7E; /* verde eucalipto (detalles sutiles) */
+}
+
+/* --- Reset básico --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --- Base del cuerpo --- */
+body {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-cuerpo);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+/* --- Títulos con Playfair Display --- */
+h1, h2, h3 {
+  font-family: var(--fuente-titulo);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-texto);
+}
+
+/* --- Enlaces --- */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+/* ===================================== */
+/*  SOMBRAS Y PROFUNDIDAD (efecto 3D)    */
+/* ===================================== */
+
+/* Todos los botones tienen sombra suave y reaccionan al pasar el mouse */
+button, a {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+/* Botones con fondo de color: sombra cálida + efecto de elevación */
+button[style*="background"],
+a[style*="background"] {
+  box-shadow: 0 4px 14px rgba(74, 63, 53, 0.18);
+}
+
+button[style*="background"]:hover,
+a[style*="background"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(74, 63, 53, 0.25);
+}
+
+button[style*="background"]:active,
+a[style*="background"]:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(74, 63, 53, 0.2);
+}
+
+/* Tarjetas (productos, cajas de contacto, etc.): sombra suave + elevación al pasar */
+.rounded-2xl, .rounded-3xl {
+  box-shadow: 0 6px 20px rgba(74, 63, 53, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.rounded-2xl:hover, .rounded-3xl:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(74, 63, 53, 0.15);
+}
+/* ===================================== */
+/*  TRANSICIONES SUAVES ENTRE SECCIONES  */
+/* ===================================== */
+
+/* Quita CUALQUIER línea entre secciones */
+section, main, #productos, #nosotras, #contacto,
+div:has(> #productos) {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Bloque de productos: crema claro */
+div:has(> #productos) {
+  background: linear-gradient(to bottom, #F5F0E8 0%, #FBF8F2 50%, #F0E9DC 100%) !important;
+}
+
+/* Nosotras: tono arena más marcado, se funde suave */
+#nosotras {
+  background: linear-gradient(to bottom, #F0E9DC 0%, #E8DDCB 50%, #EFE7DA 100%) !important;
+}
+
+/* Contacto: vuelve al crema claro, bien diferenciado */
+#contacto {
+  background: linear-gradient(to bottom, #EFE7DA 0%, #F8F3EA 45%, #FBF8F2 100%) !important;
+}
+/* ===================================== */
+/*  BOTONES Y TARJETAS: SOLO SOMBRA      */
+/* ===================================== */
+
+/* Saca los bordes de las tarjetas y deja solo la sombra suave */
+.rounded-2xl, .rounded-3xl {
+  border: none !important;
+  box-shadow: 0 6px 20px rgba(74, 63, 53, 0.10);
+}
+
+.rounded-2xl:hover, .rounded-3xl:hover {
+  box-shadow: 0 14px 34px rgba(74, 63, 53, 0.18);
+}
+
+/* Los inputs (campos de texto) sí mantienen un borde sutil para que se note dónde escribir */
+input, textarea {
+  border: 1px solid #E5DBCC !important;
+}

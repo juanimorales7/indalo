@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indalo — Mi panel</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="min-h-screen p-6" style="background: var(--color-fondo);">
+
+  <!-- BARRA SUPERIOR -->
+  <header class="flex items-center justify-between mb-10">
+    <img src="assets/logo.png" alt="Indalo" class="h-14">
+    <button onclick="cerrarSesion()"
+      class="rounded-xl px-5 py-3 text-white transition hover:opacity-90"
+      style="font-size: 17px; background: var(--color-cuero);">
+      Cerrar sesión
+    </button>
+  </header>
+
+  <main class="max-w-5xl mx-auto text-center">
+
+    <!-- BIENVENIDA -->
+    <h1 class="mb-4" style="font-size: 36px;">¡Hola! 🌿</h1>
+    <p style="font-size: 20px; color: var(--color-texto-suave);">
+      Bienvenida a tu panel. Desde acá podés gestionar tus productos.
+    </p>
+
+    <!-- BOTÓN AGREGAR NUEVO -->
+    <div class="text-center mt-10">
+      <button onclick="mostrarFormulario()" id="boton-agregar"
+        class="rounded-2xl text-white px-8 py-4 transition hover:opacity-90"
+        style="font-size: 20px; background: var(--color-cuero);">
+        ➕ Agregar nuevo producto
+      </button>
+    </div>
+
+    <!-- FORMULARIO (empieza oculto) -->
+    <div id="formulario-producto" class="mt-6 p-8 rounded-3xl border-2 text-left hidden max-w-3xl mx-auto" style="border-color: var(--color-cuerda); background: white;">
+
+      <h2 class="text-center mb-2" style="font-size: 26px;">Subir un producto nuevo</h2>
+      <p class="text-center mb-2" style="font-size: 17px; color: var(--color-texto-suave);">Seguí los pasos, uno por uno 🌿</p>
+
+      <div class="text-right mb-4">
+        <button onclick="ocultarFormulario()" style="font-size: 16px; color: var(--color-texto-suave);">✕ Cerrar</button>
+      </div>
+
+      <!-- PASO 1: Foto -->
+      <div class="mb-6">
+        <label class="block mb-2" style="font-size: 19px;">📷 Paso 1 · Elegí la foto</label>
+        <input id="foto" type="file" accept="image/*" class="hidden" onchange="mostrarNombreFoto()">
+        <div id="zona-foto"
+          onclick="document.getElementById('foto').click()"
+          class="rounded-2xl border-2 border-dashed text-center cursor-pointer transition"
+          style="border-color: var(--color-cuerda); padding: 32px 16px; background: #FBF9F5;">
+          <div style="font-size: 38px;">📷</div>
+          <p class="mt-2" style="font-size: 17px; color: var(--color-texto-suave);">Tocá aquí o arrastrá una foto</p>
+        </div>
+        <img id="vista-previa" class="hidden mt-4 mx-auto rounded-xl" style="max-height: 200px;">
+        <p id="estado-foto" class="mt-2 text-center" style="font-size: 15px; color: var(--color-texto-suave);"></p>
+      </div>
+
+      <!-- PASO 2: Nombre -->
+      <div class="mb-6">
+        <label class="block mb-2" style="font-size: 19px;">✏️ Paso 2 · Nombre del producto</label>
+        <input id="nombre" type="text" placeholder="Ej: Cesta grande"
+          class="w-full rounded-xl border-2 px-4 py-3" style="font-size: 17px; border-color: var(--color-cuerda); background: #F5F0E8;">
+      </div>
+
+      <!-- PASO 3: Precio -->
+      <div class="mb-6">
+        <label class="block mb-2" style="font-size: 19px;">💰 Paso 3 · Precio (en pesos)</label>
+        <div class="flex items-center rounded-xl border-2 px-4" style="border-color: var(--color-cuerda); background: #F5F0E8;">
+          <span style="font-size: 19px; color: var(--color-cuero);">$</span>
+          <input id="precio" type="text" inputmode="numeric" placeholder="18.000"
+            oninput="formatearPrecio()"
+            class="w-full py-3 pl-2 bg-transparent outline-none" style="font-size: 17px;">
+        </div>
+      </div>
+
+      <!-- PASO 4: Descripción -->
+      <div class="mb-8">
+        <label class="block mb-2" style="font-size: 19px;">📝 Paso 4 · Descripción</label>
+        <textarea id="descripcion" rows="3" placeholder="Ej: Tejida a mano, ideal para mantas"
+          class="w-full rounded-xl border-2 px-4 py-3" style="font-size: 17px; border-color: var(--color-cuerda); background: #F5F0E8;"></textarea>
+      </div>
+
+      <!-- PASO 5: Stock -->
+      <div class="mb-8">
+        <label class="block mb-2" style="font-size: 19px;">📦 Paso 5 · ¿Cuántas tenés? (stock)</label>
+        <input id="stock" type="number" placeholder="Ej: 5"
+          class="w-full rounded-xl border-2 px-4 py-3" style="font-size: 17px; border-color: var(--color-cuerda); background: #F5F0E8;">
+      </div>
+
+      <!-- PASO 6: Etiquetas -->
+      <div class="mb-8">
+        <label class="block mb-2" style="font-size: 19px;">🏷️ Paso 6 · Etiquetas (para que la encuentren)</label>
+        <input id="etiquetas" type="text" placeholder="Ej: posavasos, cocina, yute"
+          class="w-full rounded-xl border-2 px-4 py-3" style="font-size: 17px; border-color: var(--color-cuerda); background: #F5F0E8;">
+        <p class="mt-2" style="font-size: 14px; color: var(--color-texto-suave);">
+          Separá cada etiqueta con una coma. Sirven para que la gente busque el producto 🔍
+        </p>
+      </div>
+
+      <!-- BOTÓN PUBLICAR -->
+      <button onclick="publicarProducto()"
+        class="w-full rounded-2xl text-white py-4 transition hover:opacity-90"
+        style="font-size: 22px; background: #6B8E4E;">
+        ✅ ¡Publicar producto!
+      </button>
+
+      <p id="mensaje-resultado" class="mt-6 text-center hidden" style="font-size: 20px;"></p>
+
+    </div>
+
+    <!-- MIS PRODUCTOS (gestión) -->
+    <div class="mt-10 p-8 rounded-3xl border-2 text-left" style="border-color: var(--color-cuerda); background: white;">
+      <h2 class="text-center mb-2" style="font-size: 26px;">Mis productos</h2>
+      <p class="text-center mb-8" style="font-size: 17px; color: var(--color-texto-suave);">Acá podés ver, editar, ofertar y eliminar 🧺</p>
+      <p id="contador-productos" class="text-center mb-6" style="font-size: 18px; color: var(--color-cuero);"></p>
+      <div id="lista-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <p class="text-center" style="color: var(--color-texto-suave);">Cargando tus productos...</p>
+      </div>
+    </div>
+
+    <!-- VENTANITA DE OFERTA -->
+    <div id="modal-oferta" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.4);">
+      <div class="w-full max-w-sm rounded-3xl p-6 text-center" style="background: #F5F0E8; border: 2px solid var(--color-cuerda);">
+
+        <h3 class="mb-2" style="font-size: 24px;">🏷️ Poner oferta</h3>
+        <p id="oferta-nombre-producto" class="mb-6" style="font-size: 17px; color: var(--color-texto-suave);"></p>
+
+        <label class="block mb-2" style="font-size: 18px;">¿Cuánto de descuento?</label>
+        <div class="flex items-center justify-center rounded-xl border-2 px-4 mb-6 mx-auto" style="max-width: 200px; border-color: var(--color-cuerda); background: white;">
+          <input id="oferta-input" type="number" inputmode="numeric" placeholder="20"
+            class="w-full py-3 text-center bg-transparent outline-none" style="font-size: 24px;">
+          <span style="font-size: 22px; color: var(--color-cuero);">%</span>
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="cerrarModalOferta()"
+            class="flex-1 rounded-2xl py-3 transition hover:opacity-90"
+            style="font-size: 18px; border: 2px solid var(--color-cuerda); color: var(--color-texto-suave);">
+            Cancelar
+          </button>
+          <button onclick="confirmarOferta()"
+            class="flex-1 rounded-2xl text-white py-3 transition hover:opacity-90"
+            style="font-size: 18px; background: #D98E04;">
+            Aplicar
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VENTANITA DE EDITAR -->
+    <div id="modal-editar" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.4);">
+      <div class="w-full max-w-md rounded-3xl p-6 text-left overflow-y-auto" style="background: #F5F0E8; border: 2px solid var(--color-cuerda); max-height: 90vh;">
+
+        <h3 class="text-center mb-6" style="font-size: 24px;">✏️ Editar producto</h3>
+
+        <label class="block mb-2" style="font-size: 17px;">Nombre</label>
+        <input id="editar-nombre" type="text"
+          class="w-full rounded-xl border-2 px-4 py-3 mb-4" style="font-size: 17px; border-color: var(--color-cuerda); background: white;">
+
+        <label class="block mb-2" style="font-size: 17px;">Precio (en pesos)</label>
+        <div class="flex items-center rounded-xl border-2 px-4 mb-4" style="border-color: var(--color-cuerda); background: white;">
+          <span style="font-size: 18px; color: var(--color-cuero);">$</span>
+          <input id="editar-precio" type="text" inputmode="numeric"
+            oninput="formatearPrecioEditar()"
+            class="w-full py-3 pl-2 bg-transparent outline-none" style="font-size: 17px;">
+        </div>
+
+        <label class="block mb-2" style="font-size: 17px;">Descripción</label>
+        <textarea id="editar-descripcion" rows="3"
+          class="w-full rounded-xl border-2 px-4 py-3 mb-4" style="font-size: 17px; border-color: var(--color-cuerda); background: white;"></textarea>
+
+        <label class="block mb-2" style="font-size: 17px;">Stock (unidades)</label>
+        <input id="editar-stock" type="number"
+          class="w-full rounded-xl border-2 px-4 py-3 mb-4" style="font-size: 17px; border-color: var(--color-cuerda); background: white;">
+
+        <label class="block mb-2" style="font-size: 17px;">Etiquetas (separadas por coma)</label>
+        <input id="editar-etiquetas" type="text" placeholder="Ej: posavasos, cocina, yute"
+          class="w-full rounded-xl border-2 px-4 py-3 mb-6" style="font-size: 17px; border-color: var(--color-cuerda); background: white;">
+
+        <div class="flex gap-3">
+          <button onclick="cerrarModalEditar()"
+            class="flex-1 rounded-2xl py-3 transition hover:opacity-90"
+            style="font-size: 18px; border: 2px solid var(--color-cuerda); color: var(--color-texto-suave);">
+            Cancelar
+          </button>
+          <button onclick="guardarEdicion()"
+            class="flex-1 rounded-2xl text-white py-3 transition hover:opacity-90"
+            style="font-size: 18px; background: #6B8E4E;">
+            Guardar cambios
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- LÓGICA DEL PANEL -->
+  <script type="module" src="js/panel.js"></script>
+  <script type="module" src="js/subir-producto.js"></script>
+  <script type="module" src="js/gestionar-productos.js"></script>
+
+</body>
+
+</html>listo 

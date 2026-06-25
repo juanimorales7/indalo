@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indalo — Panel de administración</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4" style="background: var(--color-fondo);">
+
+  <!-- ===================== -->
+  <!-- TARJETA DE LOGIN      -->
+  <!-- ===================== -->
+  <div class="w-full max-w-md rounded-3xl border-2 p-8 text-center"
+       style="background: #F5F0E8; border-color: var(--color-cuerda);">
+
+    <!-- Logo y título -->
+    <img src="assets/logo.png" alt="Indalo" class="h-16 mx-auto mb-2">
+    <p class="mb-8" style="font-size: 20px; color: var(--color-texto);">Panel de administración</p>
+
+    <!-- Campo: Correo -->
+    <div class="text-left mb-5">
+      <label class="block mb-2" style="font-size: 18px; color: var(--color-texto);">Tu correo</label>
+     <input id="email" type="email" placeholder="Escribí tu correo aquí"
+        class="w-full rounded-xl border-2 px-4 py-3 outline-none"
+        style="font-size: 18px; border-color: var(--color-cuerda); background: white;">
+    </div>
+
+    <!-- Campo: Contraseña -->
+    <div class="text-left mb-3">
+      <label class="block mb-2" style="font-size: 18px; color: var(--color-texto);">Tu contraseña</label>
+      <input id="password" type="password" placeholder="••••••••"
+        class="w-full rounded-xl border-2 px-4 py-3 outline-none"
+        style="font-size: 18px; border-color: var(--color-cuerda); background: white;">
+    </div>
+
+    <!-- Ver contraseña -->
+    <label class="flex items-center gap-2 mb-6 cursor-pointer" style="font-size: 16px; color: var(--color-texto-suave);">
+      <input type="checkbox" onclick="verContrasena()" class="w-5 h-5">
+      👁️ Ver mi contraseña
+    </label>
+
+    <!-- Botón entrar -->
+    <button onclick="iniciarSesion()"
+      class="w-full rounded-2xl text-white py-4 transition hover:opacity-90"
+      style="font-size: 20px; background: var(--color-cuero);">
+      Entrar a mi panel
+    </button>
+
+    <!-- Mensaje de error (aparece solo si algo falla) -->
+    <p id="mensaje-error" class="mt-4 hidden" style="font-size: 17px; color: #A32D2D;"></p>
+
+  </div>
+
+  <!-- ===================== -->
+  <!-- LÓGICA DEL LOGIN      -->
+  <!-- ===================== -->
+  <script type="module" src="js/login.js"></script>
+
+</body>
+
+</html>

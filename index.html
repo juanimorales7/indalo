@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indalo — Cestería Nórdica Artesanal</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- NAVEGACIÓN (fija, se esconde al bajar y aparece al subir) -->
+  <nav id="navbar"
+    class="fixed top-0 left-0 w-full z-50 flex items-center justify-end px-8 border-b border-[#E8E0D5] transition-transform duration-300"
+    style="background: rgba(245,240,232,0.95); backdrop-filter: blur(8px); height: 96px;">
+
+    <ul class="flex items-center gap-8 text-xl" style="color: var(--color-texto-suave);">
+      <li><a href="#inicio" class="hover:text-[#8B6F4E] transition">Inicio</a></li>
+      <li><a href="#seccion-ofertas" class="hover:text-[#8B6F4E] transition">Ofertas</a></li>
+      <li><a href="#productos" class="hover:text-[#8B6F4E] transition">Productos</a></li>
+      <li><a href="#nosotros" class="hover:text-[#8B6F4E] transition">Nosotros</a></li>
+      <li><a href="#contacto" class="hover:text-[#8B6F4E] transition">Contacto</a></li>
+    </ul>
+
+  </nav>
+
+  <!-- LOGO FLOTANTE (siempre visible, lleva al inicio) -->
+  <a href="#inicio" id="logo-flotante"
+     class="fixed top-2 left-6 z-[60] transition hover:opacity-90"
+     style="filter: drop-shadow(0 4px 10px rgba(74,63,53,0.35));">
+    <img src="assets/logo.png" alt="Indalo — Ir al inicio" class="h-20">
+  </a>
+
+  <!-- Espacio para que el contenido no quede tapado por la barra fija -->
+  <div style="height: 96px;"></div>
+
+  <!-- ===================== -->
+  <!-- HERO DE INICIO        -->
+  <!-- ===================== -->
+  <section id="inicio" class="max-w-6xl mx-auto px-6 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+
+      <!-- IZQUIERDA: imagen de bienvenida con logo encima -->
+      <div class="relative rounded-3xl overflow-hidden" style="min-height: 460px;">
+        <img src="assets/hero-inicio.jpeg" alt="Indalo — Cestería nórdica"
+             class="absolute inset-0 w-full h-full object-cover"
+             onerror="this.style.display='none';">
+        <div class="absolute bottom-0 left-0 w-full flex flex-col items-center text-center px-6 pb-10 pt-20"
+             style="background: linear-gradient(to top, rgba(245,240,232,0.97) 30%, rgba(245,240,232,0));">
+          <img src="assets/logo.png" alt="Indalo" class="h-40 mb-1">
+          <p style="font-family: var(--fuente-titulo); font-size: 22px; color: var(--color-texto);">
+            Cestería nórdica hecha a mano
+          </p>
+        </div>
+      </div>
+
+      <!-- DERECHA: lo nuevo -->
+      <div class="flex flex-col justify-center">
+        <div class="flex items-center gap-3 mb-6">
+          <span style="font-size: 28px;">✨</span>
+          <h2 style="font-family: var(--fuente-titulo); font-size: 38px; color: var(--color-texto);">Lo nuevo</h2>
+        </div>
+        <p class="mb-6 text-[#8A7B6B]" style="font-size: 16px;">Las últimas piezas que sumamos a la colección</p>
+        <div id="galeria-nuevos" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- SECCIÓN DE OFERTAS    -->
+  <!-- ===================== -->
+  <section id="seccion-ofertas" class="hidden">
+    <div class="relative w-full">
+      <img src="assets/portada-ofertas.jpeg" alt="Ofertas Indalo"
+           class="w-full object-cover"
+           style="max-height: 480px;"
+           onerror="this.style.display='none';">
+      <div class="absolute bottom-0 left-0 w-full" style="height: 120px; background: linear-gradient(to bottom, rgba(245,240,232,0), #F5F0E8);"></div>
+    </div>
+    <div class="max-w-6xl mx-auto px-6 pt-6 pb-4">
+      <div id="galeria-ofertas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- GALERÍA DE PRODUCTOS  -->
+  <!-- ===================== -->
+  <div style="background: #FBF8F2;">
+  <main id="productos" class="max-w-6xl mx-auto px-6 py-16">
+
+    <div class="text-center mb-12">
+      <h2 class="mb-3" style="font-family: var(--fuente-titulo); font-size: 56px; color: var(--color-texto); letter-spacing: 1px;">Nuestros Productos</h2>
+      <p class="text-[#8A7B6B]" style="font-size: 18px;">Cestería nórdica tejida a mano, pieza por pieza</p>
+    </div>
+
+    <!-- BUSCADOR -->
+    <div class="max-w-xl mx-auto mb-6">
+      <div class="flex items-center rounded-full border-2 px-5 py-3" style="border-color: var(--color-cuerda); background: white;">
+        <span style="font-size: 18px;">🔍</span>
+        <input id="buscador" type="text" placeholder="Buscá por nombre o categoría (ej: posavasos)"
+          oninput="filtrarProductos()"
+          class="w-full pl-3 bg-transparent outline-none" style="font-size: 16px;">
+      </div>
+    </div>
+
+    <!-- BOTONES DE CATEGORÍAS (se arman solos) -->
+    <div id="categorias" class="flex flex-wrap justify-center gap-2 mb-10"></div>
+
+    <!-- Grilla de productos -->
+    <div id="galeria" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+    <!-- Botones de paginación (hojas) -->
+    <div id="paginacion" class="flex flex-wrap justify-center items-center gap-2 mt-12"></div>
+
+  </main>
+  </div>
+
+  <!-- ===================== -->
+  <!-- NOSOTROS / HISTORIA   -->
+  <!-- ===================== -->
+  <section id="nosotros" class="py-20" style="background: #EFE7DA;">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="text-center mb-14">
+        <p class="mb-2" style="font-size: 16px; letter-spacing: 3px; text-transform: uppercase; color: var(--color-cuero);">Nosotros</p>
+        <h2 style="font-family: var(--fuente-titulo); font-size: 48px; color: var(--color-texto);">Nuestra historia</h2>
+        <p class="mt-3 italic" style="font-size: 20px; color: var(--color-texto-suave);">El origen de un nuevo camino</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+        <div class="rounded-3xl overflow-hidden cursor-pointer"
+             onclick="abrirModalInfo({icono:'', titulo:'Nuestra historia', subtitulo:'', imagen:'assets/nosotros.jpeg', texto:'Detrás de cada pieza de Indalo hay manos que tejen con dedicación, paciencia y cariño. Sandra transforma simples cordones de algodón en objetos que llevan calidez a tu hogar.'})">
+          <img src="assets/nosotros.jpeg" alt="Sandra — Indalo"
+               class="w-full object-cover" style="min-height: 400px;"
+               onerror="this.style.display='none'; this.parentElement.style.display='none';">
+        </div>
+        <div style="font-size: 17px; line-height: 1.8; color: var(--color-texto);">
+          <p class="mb-4">
+            Detrás de Indalo hay una historia de reinvención, pasión y raíces familiares. Todo comenzó cuando <strong>Sandra</strong>, después de una vida de trabajo, llegó a su etapa de jubilación. Lejos de quedarse quieta, decidió canalizar esa habilidad natural que siempre tuvo en sus manos hacia algo nuevo: la cestería nórdica.
+          </p>
+          <p>
+            Lo que empezó como un taller de aprendizaje y un cable a tierra, se transformó en horas de práctica, perfeccionamiento y un amor profundo por el oficio. Al ver la calidez de sus creaciones y el entusiasmo que le ponía a cada pieza, supimos que esto no podía quedarse solo en casa; tenía que salir al mundo.
+          </p>
+        </div>
+      </div>
+
+      <div class="mb-16">
+        <h3 class="text-center mb-8" style="font-family: var(--fuente-titulo); font-size: 32px; color: var(--color-texto);">El equipo detrás de la marca</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          <div class="rounded-3xl p-8 text-center cursor-pointer"
+               style="background: #F8F3EA;"
+               onclick="abrirModalInfo({icono:'🧶', titulo:'Sandra', subtitulo:'La Artesana', imagen:'', texto:'El alma creativa. Es quien diseña, teje y le da vida a cada producto, asegurándose de que cada pieza de cestería tenga esa esencia única y artesanal que la caracteriza. Cada cesta nace de sus manos con paciencia y dedicación.'})">
+            <div style="font-size: 40px;">🧶</div>
+            <h4 class="mt-3 mb-2" style="font-family: var(--fuente-titulo); font-size: 24px; color: var(--color-texto);">Sandra</h4>
+            <p style="font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-cuero);">La Artesana</p>
+            <p class="mt-3" style="font-size: 16px; line-height: 1.7; color: var(--color-texto-suave);">
+              El alma creativa. Es quien diseña, teje y le da vida a cada producto, asegurándose de que cada pieza tenga esa esencia única y artesanal que la caracteriza.
+            </p>
+          </div>
+
+          <div class="rounded-3xl p-8 text-center cursor-pointer"
+               style="background: #F8F3EA;"
+               onclick="abrirModalInfo({icono:'✨', titulo:'Juan Ignacio', subtitulo:'Marketing & Branding', imagen:'', texto:'El estratega digital. Hijo de Sandra y el encargado de que la marca crezca, se vea hermosa en redes y llegue a los hogares de quienes valoran el diseño hecho a mano. Es quien lleva a Indalo al mundo digital.'})">
+            <div style="font-size: 40px;">✨</div>
+            <h4 class="mt-3 mb-2" style="font-family: var(--fuente-titulo); font-size: 24px; color: var(--color-texto);">Juan Ignacio</h4>
+            <p style="font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-cuero);">Marketing & Branding</p>
+            <p class="mt-3" style="font-size: 16px; line-height: 1.7; color: var(--color-texto-suave);">
+              El estratega digital. Hijo de Sandra y el encargado de que la marca crezca, se vea hermosa en redes y llegue a los hogares de quienes valoran el diseño hecho a mano.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="rounded-3xl p-10 text-center cursor-pointer"
+           style="background: #F8F3EA;"
+           onclick="abrirModalInfo({icono:'🌿', titulo:'¿Por qué nos llamamos Indalo?', subtitulo:'Nuestras raíces', imagen:'', texto:'Nuestro nombre es un homenaje a nuestras raíces. La mamá de Sandra (y abuela de Juan Ignacio) nació en Andalucía, España. El Indalo es un símbolo ancestral de esa tierra que representa la protección, la buena suerte y la conexión entre el ser humano y la naturaleza. Sentimos que este símbolo nos representaba a la perfección: honra nuestro legado familiar y plasma el deseo de que cada objeto que creamos lleve buenas energías y calidez a tu hogar.'})">
+        <h3 class="mb-4" style="font-family: var(--fuente-titulo); font-size: 30px; color: var(--color-texto);">¿Por qué nos llamamos Indalo?</h3>
+        <p class="max-w-3xl mx-auto" style="font-size: 17px; line-height: 1.8; color: var(--color-texto);">
+          Nuestro nombre es un homenaje a nuestras raíces. La mamá de Sandra (y abuela de Juan Ignacio) nació en la hermosa región de <strong>Andalucía, España</strong>. El Indalo es un símbolo ancestral de esa tierra que representa la protección, la buena suerte y la conexión entre el ser humano y la naturaleza.
+        </p>
+        <p class="max-w-3xl mx-auto mt-4 italic" style="font-size: 18px; line-height: 1.8; color: var(--color-cuero);">
+          Sentimos que este símbolo nos representaba a la perfección: no solo honra nuestro legado familiar, sino que plasma el deseo de que cada objeto que creamos lleve buenas energías y calidez a tu hogar.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- CONTACTO              -->
+  <!-- ===================== -->
+  <section id="contacto" class="py-20" style="background: #FBF8F2;">
+    <div class="max-w-6xl mx-auto px-6">
+
+      <div class="text-center mb-14">
+        <p class="mb-2" style="font-size: 16px; letter-spacing: 3px; text-transform: uppercase; color: var(--color-cuero);">Contacto</p>
+        <h2 style="font-family: var(--fuente-titulo); font-size: 48px; color: var(--color-texto);">Hablemos</h2>
+        <p class="mt-3" style="font-size: 18px; color: var(--color-texto-suave);">Escribinos o seguinos en nuestras redes 🌿</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+        <!-- IZQUIERDA: datos de contacto -->
+        <div class="space-y-6">
+
+          <div class="space-y-3">
+            <a href="https://wa.me/542625592060" target="_blank"
+               class="flex items-center gap-4 p-4 rounded-2xl transition hover:opacity-90" style="background: white;">
+              <span style="font-size: 26px;">📱</span>
+              <div>
+                <p style="font-size: 17px; color: var(--color-texto);">WhatsApp</p>
+                <p style="font-size: 15px; color: var(--color-texto-suave);">Escribinos directo</p>
+              </div>
+            </a>
+
+            <a href="https://www.instagram.com/indalo.arg/" target="_blank"
+               class="flex items-center gap-4 p-4 rounded-2xl transition hover:opacity-90" style="background: white;">
+              <span style="font-size: 26px;">📸</span>
+              <div>
+                <p style="font-size: 17px; color: var(--color-texto);">Instagram</p>
+                <p style="font-size: 15px; color: var(--color-texto-suave);">@indalo.arg</p>
+              </div>
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=61590928372113" target="_blank"
+               class="flex items-center gap-4 p-4 rounded-2xl transition hover:opacity-90" style="background: white;">
+              <span style="font-size: 26px;">👍</span>
+              <div>
+                <p style="font-size: 17px; color: var(--color-texto);">Facebook</p>
+                <p style="font-size: 15px; color: var(--color-texto-suave);">Seguinos en Facebook</p>
+              </div>
+            </a>
+
+            <a href="mailto:indalo.cesteria@gmail.com"
+               class="flex items-center gap-4 p-4 rounded-2xl transition hover:opacity-90" style="background: white;">
+              <span style="font-size: 26px;">✉️</span>
+              <div>
+                <p style="font-size: 17px; color: var(--color-texto);">Email</p>
+                <p style="font-size: 15px; color: var(--color-texto-suave);">indalo.cesteria@gmail.com</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="p-5 rounded-2xl" style="background: white;">
+            <p class="mb-4" style="font-size: 18px; color: var(--color-texto);">📍 Entrega sin costo en:</p>
+
+            <div class="flex items-center justify-between mb-3">
+              <span style="font-size: 16px; color: var(--color-texto-suave);">General Alvear, Mendoza</span>
+              <a href="https://maps.app.goo.gl/iiqho1B8wy2EbJHr6" target="_blank"
+                 class="px-4 py-2 rounded-full text-white text-sm transition hover:opacity-90" style="background: var(--color-cuero);">Ver mapa</a>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span style="font-size: 16px; color: var(--color-texto-suave);">San Rafael, Mendoza</span>
+              <a href="https://maps.app.goo.gl/FS2AeT6ku69HjSKw8" target="_blank"
+                 class="px-4 py-2 rounded-full text-white text-sm transition hover:opacity-90" style="background: var(--color-cuero);">Ver mapa</a>
+            </div>
+
+            <p class="mt-4" style="font-size: 14px; color: var(--color-texto-suave);">🚚 Hacemos envíos a todo el país</p>
+          </div>
+
+        </div>
+
+        <!-- DERECHA: formulario que abre WhatsApp -->
+        <div class="p-8 rounded-3xl" style="background: white;">
+          <h3 class="mb-6" style="font-family: var(--fuente-titulo); font-size: 26px; color: var(--color-texto);">Envianos un mensaje</h3>
+
+          <label class="block mb-2" style="font-size: 16px; color: var(--color-texto);">Tu nombre</label>
+          <input id="contacto-nombre" type="text" placeholder="Ej: María"
+            class="w-full rounded-xl px-4 py-3 mb-4" style="font-size: 16px; background: #F5F0E8;">
+
+          <label class="block mb-2" style="font-size: 16px; color: var(--color-texto);">Tu mensaje</label>
+          <textarea id="contacto-mensaje" rows="4" placeholder="Hola, quería consultar por..."
+            class="w-full rounded-xl px-4 py-3 mb-6" style="font-size: 16px; background: #F5F0E8;"></textarea>
+
+          <button onclick="enviarContacto()"
+            class="w-full py-4 rounded-2xl text-white text-lg transition hover:opacity-90"
+            style="background: #25D366;">
+            Enviar por WhatsApp
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- MODAL DE INFORMACIÓN (Nosotros) -->
+  <!-- ===================== -->
+  <div id="modal-info" class="fixed inset-0 z-[70] hidden items-center justify-center p-4" style="background: rgba(74,63,53,0.6); backdrop-filter: blur(4px);">
+    <div class="w-full max-w-2xl rounded-3xl overflow-hidden relative p-10 text-center" style="background: #FBF8F2; max-height: 90vh; overflow-y: auto;">
+      <button onclick="cerrarModalInfo()"
+        class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center text-white"
+        style="background: rgba(74,63,53,0.5); font-size: 22px;">×</button>
+      <div id="modal-info-icono" style="font-size: 56px;"></div>
+      <h2 id="modal-info-titulo" class="mt-4 mb-2" style="font-family: var(--fuente-titulo); font-size: 34px; color: var(--color-texto);"></h2>
+      <p id="modal-info-subtitulo" class="mb-5" style="font-size: 16px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-cuero);"></p>
+      <img id="modal-info-imagen" src="" alt="" class="hidden mx-auto mb-5 rounded-2xl" style="max-height: 320px;">
+      <p id="modal-info-texto" style="font-size: 18px; line-height: 1.8; color: var(--color-texto);"></p>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- MODAL DE PRODUCTO     -->
+  <!-- ===================== -->
+  <div id="modal-producto" class="fixed inset-0 z-[70] hidden items-center justify-center p-4" style="background: rgba(74,63,53,0.6); backdrop-filter: blur(4px);">
+    <div class="w-full max-w-4xl rounded-3xl overflow-hidden relative" style="background: #FBF8F2; max-height: 90vh;">
+
+      <button onclick="cerrarModalProducto()"
+        class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center text-white"
+        style="background: rgba(74,63,53,0.5); font-size: 22px;">×</button>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2" style="max-height: 90vh;">
+
+        <div class="bg-[#E5DBCC] flex items-center justify-center">
+          <img id="modal-foto" src="" alt="" class="w-full h-full object-cover" style="min-height: 300px; max-height: 90vh;">
+        </div>
+
+        <div class="p-8 flex flex-col overflow-y-auto" style="max-height: 90vh;">
+
+          <h2 id="modal-nombre" class="mb-3" style="font-family: var(--fuente-titulo); font-size: 32px; color: var(--color-texto);"></h2>
+          <div id="modal-precio" class="mb-4"></div>
+          <p id="modal-descripcion" class="mb-4" style="font-size: 16px; line-height: 1.7; color: var(--color-texto-suave);"></p>
+          <p id="modal-stock" class="mb-6" style="font-size: 15px;"></p>
+
+          <div class="flex flex-col gap-3 mt-auto">
+            <button id="modal-btn-agregar"
+              class="w-full py-4 rounded-2xl text-white text-lg transition hover:opacity-90"
+              style="background: var(--color-cuero);">
+              🛒 Agregar al carrito
+            </button>
+            <button id="modal-btn-comprar"
+              class="w-full py-4 rounded-2xl text-white text-lg transition hover:opacity-90"
+              style="background: #25D366;">
+              Comprar ahora
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CARRITO -->
+  <button onclick="abrirCarrito()"
+    class="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 rounded-full text-white shadow-lg"
+    style="background: var(--color-cuero);">
+    🛒 <span id="carrito-contador" class="bg-white text-[#A1623C] rounded-full px-2 text-sm">0</span>
+  </button>
+
+  <div id="carrito-overlay" onclick="cerrarCarrito()"
+    class="fixed inset-0 bg-black/30 z-40 hidden"></div>
+
+  <aside id="carrito-panel"
+    class="fixed top-0 right-0 h-full w-full max-w-md bg-[#F5F0E8] z-50 p-6 flex flex-col translate-x-full transition-transform duration-300">
+
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl" style="font-family: var(--fuente-titulo);">Tu pedido</h2>
+      <button onclick="cerrarCarrito()" class="text-2xl text-[#8A7B6B]">×</button>
+    </div>
+
+    <div id="carrito-items" class="flex-grow overflow-y-auto"></div>
+
+<div class="border-t border-[#D4C3A8] pt-4 mt-4">
+
+      <!-- CÁLCULO DE ENVÍO -->
+      <div class="mb-4">
+        <label class="block mb-2" style="font-size: 15px; color: var(--color-texto);">📦 Calculá tu envío</label>
+        <div class="flex gap-2">
+          <input id="codigo-postal" type="text" inputmode="numeric" placeholder="Tu código postal"
+            class="flex-grow rounded-xl px-3 py-2" style="font-size: 15px; background: white; border: 1px solid var(--color-cuerda);">
+          <button onclick="calcularEnvio()"
+            class="px-4 py-2 rounded-xl text-white text-sm" style="background: var(--color-cuero);">Calcular</button>
+        </div>
+        <div id="resultado-envio" class="mt-3"></div>
+      </div>
+
+      <!-- Subtotal / Envío / Total -->
+      <div class="flex items-center justify-between mb-1">
+        <span style="font-size: 15px; color: var(--color-texto-suave);">Subtotal:</span>
+        <span id="carrito-subtotal" style="font-size: 15px; color: var(--color-texto-suave);">$0</span>
+      </div>
+      <div class="flex items-center justify-between mb-3">
+        <span style="font-size: 15px; color: var(--color-texto-suave);">Envío:</span>
+        <span id="carrito-envio" style="font-size: 15px; color: var(--color-texto-suave);">—</span>
+      </div>
+      <div class="flex items-center justify-between mb-4 pt-2 border-t border-[#E5DBCC]">
+        <span class="text-lg">Total:</span>
+        <span id="carrito-total" class="text-2xl" style="color: var(--color-cuero);">$0</span>
+      </div>
+
+      <button onclick="enviarPedido()"
+        class="w-full py-4 rounded-full text-white text-lg transition hover:opacity-90"
+        style="background: #25D366;">
+        Enviar pedido por WhatsApp
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- FOOTER -->
+  <footer class="text-center py-10 text-[#8A7B6B] text-sm">
+    <p>Indalo — Cestería nórdica artesanal 🌿</p>
+    <p class="mt-1">Envíos a todo el país · Entrega sin costo en General Alvear y San Rafael</p>
+  </footer>
+
+  <!-- ARCHIVO JAVASCRIPT (módulo, conectado a Firebase) -->
+  <script type="module" src="js/carrito.js"></script>
+
+  <script>
+    function abrirCarrito() {
+      document.getElementById("carrito-panel").classList.remove("translate-x-full");
+      document.getElementById("carrito-overlay").classList.remove("hidden");
+    }
+    function cerrarCarrito() {
+      document.getElementById("carrito-panel").classList.add("translate-x-full");
+      document.getElementById("carrito-overlay").classList.add("hidden");
+    }
+
+    function enviarContacto() {
+      const nombre = document.getElementById("contacto-nombre").value.trim();
+      const mensaje = document.getElementById("contacto-mensaje").value.trim();
+
+      if (nombre === "" || mensaje === "") {
+        alert("Por favor, completá tu nombre y mensaje 🌿");
+        return;
+      }
+
+      const texto = `¡Hola Indalo! 🌿 Soy ${nombre}.%0A%0A${mensaje}`;
+      window.open(`https://wa.me/542625592060?text=${texto}`, "_blank");
+    }
+
+    let ultimoScroll = 0;
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", function () {
+      const scrollActual = window.pageYOffset;
+      if (scrollActual > ultimoScroll && scrollActual > 120) {
+        navbar.style.transform = "translateY(-100%)";
+      } else {
+        navbar.style.transform = "translateY(0)";
+      }
+      ultimoScroll = scrollActual;
+    });
+  </script>
+
+</body>
+</html>
