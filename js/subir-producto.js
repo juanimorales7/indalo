@@ -1,6 +1,6 @@
 // =========================================
 //  SUBIR PRODUCTO — INDALO
-//  Maneja la foto, el precio y publicar
+//  Maneja varias fotos, el precio y publicar
 // =========================================
 
 import { db } from "./firebase-config.js";
@@ -10,25 +10,61 @@ import { collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.2/fi
 const CLOUD_NAME = "dn5kdjvgs";
 const UPLOAD_PRESET = "indalo_productos";
 
-// Guarda la foto que el usuario eligió
-let archivoFoto = null;
+// 📷 Máximo de fotos por producto
+const MAX_FOTOS = 6;
 
-// --- Cuando se elige una foto con el botón ---
+// Lista de fotos que el usuario eligió
+let archivosFotos = [];
+
+// --- Cuando se eligen fotos con el botón ---
 function mostrarNombreFoto() {
   const input = document.getElementById("foto");
   if (input.files.length > 0) {
-    procesarFoto(input.files[0]);
+    agregarFotos(input.files);
   }
 }
 
-// --- Muestra la vista previa de la foto ---
-function procesarFoto(archivo) {
-  archivoFoto = archivo;
-  const vista = document.getElementById("vista-previa");
+// --- Agrega fotos a la lista (sin pasar el máximo) ---
+function agregarFotos(listaArchivos) {
+  for (let i = 0; i < listaArchivos.length; i++) {
+    if (archivosFotos.length >= MAX_FOTOS) {
+      mostrarMensaje(`Máximo ${MAX_FOTOS} fotos por producto 🌿`, "error");
+      break;
+    }
+    archivosFotos.push(listaArchivos[i]);
+  }
+  dibujarVistasPrevias();
+}
+
+// --- Dibuja las miniaturas de todas las fotos elegidas ---
+function dibujarVistasPrevias() {
+  const cont = document.getElementById("vistas-previas");
   const estado = document.getElementById("estado-foto");
-  vista.src = URL.createObjectURL(archivo);
-  vista.classList.remove("hidden");
-  estado.textContent = "✅ Foto lista: " + archivo.name;
+  if (!cont) return;
+
+  cont.innerHTML = "";
+  archivosFotos.forEach(function (archivo, indice) {
+    const url = URL.createObjectURL(archivo);
+    cont.innerHTML += `
+      <div style="position: relative; display: inline-block;">
+        <img src="${url}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 12px; border: 1px solid #D4C3A8;">
+        <button type="button" onclick="quitarFoto(${indice})"
+          style="position: absolute; top: -6px; right: -6px; width: 24px; height: 24px; border-radius: 50%; background: #A32D2D; color: white; font-size: 14px; line-height: 1; border: none; cursor: pointer;">×</button>
+      </div>
+    `;
+  });
+
+  if (estado) {
+    estado.textContent = archivosFotos.length > 0
+      ? `✅ ${archivosFotos.length} foto(s) lista(s)`
+      : "";
+  }
+}
+
+// --- Quita una foto de la lista ---
+function quitarFoto(indice) {
+  archivosFotos.splice(indice, 1);
+  dibujarVistasPrevias();
 }
 
 // --- Arrastrar y soltar ---
@@ -45,7 +81,7 @@ if (zona) {
     e.preventDefault();
     zona.style.background = "#FBF9F5";
     if (e.dataTransfer.files.length > 0) {
-      procesarFoto(e.dataTransfer.files[0]);
+      agregarFotos(e.dataTransfer.files);
     }
   });
 }
@@ -73,7 +109,7 @@ function ocultarFormulario() {
 }
 
 // =========================================
-//  PUBLICAR PRODUCTO (sube foto + guarda datos)
+//  PUBLICAR PRODUCTO (sube fotos + guarda datos)
 // =========================================
 async function publicarProducto() {
   const nombre = document.getElementById("nombre").value.trim();
@@ -81,7 +117,6 @@ async function publicarProducto() {
   const descripcion = document.getElementById("descripcion").value.trim();
   const stock = document.getElementById("stock").value;
 
-  // Convertimos el texto "posavasos, cocina" en una lista de etiquetas
   const etiquetasTexto = document.getElementById("etiquetas").value;
   const etiquetas = etiquetasTexto
     .split(",")
@@ -90,8 +125,8 @@ async function publicarProducto() {
 
   const boton = document.querySelector('button[onclick="publicarProducto()"]');
 
-  if (!archivoFoto) {
-    mostrarMensaje("Por favor, elegí una foto del producto 📷", "error");
+  if (archivosFotos.length === 0) {
+    mostrarMensaje("Por favor, elegí al menos una foto del producto 📷", "error");
     return;
   }
   if (nombre === "" || precioTexto === "" || descripcion === "" || stock === "") {
@@ -103,27 +138,35 @@ async function publicarProducto() {
   boton.textContent = "Subiendo tu producto... ⏳";
 
   try {
-    // 1) Subimos la foto a Cloudinary
-    const datosFoto = new FormData();
-    datosFoto.append("file", archivoFoto);
-    datosFoto.append("upload_preset", UPLOAD_PRESET);
+    // 1) Subimos TODAS las fotos a Cloudinary
+    const urls = [];
+    for (let i = 0; i < archivosFotos.length; i++) {
+      boton.textContent = `Subiendo foto ${i + 1} de ${archivosFotos.length}... ⏳`;
 
-    const respuesta = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-      { method: "POST", body: datosFoto }
-    );
-    const resultadoFoto = await respuesta.json();
+      const datosFoto = new FormData();
+      datosFoto.append("file", archivosFotos[i]);
+      datosFoto.append("upload_preset", UPLOAD_PRESET);
 
-    if (!resultadoFoto.secure_url) {
-      throw new Error("No se pudo subir la foto");
+      const respuesta = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        { method: "POST", body: datosFoto }
+      );
+      const resultadoFoto = await respuesta.json();
+
+      if (!resultadoFoto.secure_url) {
+        throw new Error("No se pudo subir una foto");
+      }
+      urls.push(resultadoFoto.secure_url);
     }
 
     // 2) Guardamos el producto en Firestore
+    //    imagen = la primera (compatibilidad) / imagenes = la lista completa
     await addDoc(collection(db, "productos"), {
       nombre: nombre,
       precio: Number(precioTexto),
       descripcion: descripcion,
-      imagen: resultadoFoto.secure_url,
+      imagen: urls[0],
+      imagenes: urls,
       stock: Number(stock),
       descuento: 0,
       etiquetas: etiquetas,
@@ -158,12 +201,13 @@ function limpiarFormulario() {
   document.getElementById("stock").value = "";
   document.getElementById("etiquetas").value = "";
   document.getElementById("foto").value = "";
-  document.getElementById("vista-previa").classList.add("hidden");
+  archivosFotos = [];
+  dibujarVistasPrevias();
   document.getElementById("estado-foto").textContent = "";
-  archivoFoto = null;
 }
 
 window.mostrarNombreFoto = mostrarNombreFoto;
+window.quitarFoto = quitarFoto;
 window.formatearPrecio = formatearPrecio;
 window.mostrarFormulario = mostrarFormulario;
 window.ocultarFormulario = ocultarFormulario;

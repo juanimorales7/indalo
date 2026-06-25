@@ -51,18 +51,20 @@
         <button onclick="ocultarFormulario()" style="font-size: 16px; color: var(--color-texto-suave);">✕ Cerrar</button>
       </div>
 
-      <!-- PASO 1: Foto -->
+      <!-- PASO 1: Fotos (hasta 6) -->
       <div class="mb-6">
-        <label class="block mb-2" style="font-size: 19px;">📷 Paso 1 · Elegí la foto</label>
-        <input id="foto" type="file" accept="image/*" class="hidden" onchange="mostrarNombreFoto()">
+        <label class="block mb-2" style="font-size: 19px;">📷 Paso 1 · Elegí las fotos (hasta 6)</label>
+        <input id="foto" type="file" accept="image/*" multiple class="hidden" onchange="mostrarNombreFoto()">
         <div id="zona-foto"
           onclick="document.getElementById('foto').click()"
           class="rounded-2xl border-2 border-dashed text-center cursor-pointer transition"
           style="border-color: var(--color-cuerda); padding: 32px 16px; background: #FBF9F5;">
           <div style="font-size: 38px;">📷</div>
-          <p class="mt-2" style="font-size: 17px; color: var(--color-texto-suave);">Tocá aquí o arrastrá una foto</p>
+          <p class="mt-2" style="font-size: 17px; color: var(--color-texto-suave);">Tocá aquí o arrastrá tus fotos</p>
+          <p class="mt-1" style="font-size: 14px; color: var(--color-texto-suave);">Podés subir hasta 6 fotos por producto</p>
         </div>
-        <img id="vista-previa" class="hidden mt-4 mx-auto rounded-xl" style="max-height: 200px;">
+        <!-- Acá aparecen las miniaturas de las fotos elegidas -->
+        <div id="vistas-previas" class="flex flex-wrap gap-3 mt-4 justify-center"></div>
         <p id="estado-foto" class="mt-2 text-center" style="font-size: 15px; color: var(--color-texto-suave);"></p>
       </div>
 
