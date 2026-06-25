@@ -18,10 +18,11 @@
 
   <!-- NAVEGACIÓN (fija, se esconde al bajar y aparece al subir) -->
   <nav id="navbar"
-    class="fixed top-0 left-0 w-full z-50 flex items-center justify-end px-8 border-b border-[#E8E0D5] transition-transform duration-300"
-    style="background: rgba(245,240,232,0.95); backdrop-filter: blur(8px); height: 96px;">
+    class="fixed top-0 left-0 w-full z-50 flex items-center justify-end px-6 sm:px-8 border-b border-[#E8E0D5] transition-transform duration-300"
+    style="background: rgba(245,240,232,0.95); backdrop-filter: blur(8px); height: 80px;">
 
-    <ul class="flex items-center gap-8 text-xl" style="color: var(--color-texto-suave);">
+    <!-- MENÚ de escritorio (se oculta en celular) -->
+    <ul class="hidden md:flex items-center gap-8 text-xl" style="color: var(--color-texto-suave);">
       <li><a href="#inicio" class="hover:text-[#8B6F4E] transition">Inicio</a></li>
       <li><a href="#seccion-ofertas" class="hover:text-[#8B6F4E] transition">Ofertas</a></li>
       <li><a href="#productos" class="hover:text-[#8B6F4E] transition">Productos</a></li>
@@ -29,17 +30,38 @@
       <li><a href="#contacto" class="hover:text-[#8B6F4E] transition">Contacto</a></li>
     </ul>
 
+    <!-- BOTÓN HAMBURGUESA (solo en celular) -->
+    <button onclick="abrirMenu()" class="md:hidden flex items-center justify-center w-12 h-12 rounded-xl"
+      style="color: var(--color-texto); font-size: 28px;">
+      ☰
+    </button>
+
   </nav>
+
+  <!-- MENÚ DESPLEGABLE DE CELULAR -->
+  <div id="menu-movil-overlay" onclick="cerrarMenu()"
+    class="fixed inset-0 z-[65] hidden" style="background: rgba(74,63,53,0.4);"></div>
+
+  <div id="menu-movil"
+    class="fixed top-0 right-0 h-full w-64 z-[66] p-8 flex flex-col gap-6 translate-x-full transition-transform duration-300"
+    style="background: #F5F0E8;">
+    <button onclick="cerrarMenu()" class="self-end text-3xl" style="color: var(--color-texto-suave);">×</button>
+    <a href="#inicio" onclick="cerrarMenu()" class="text-xl" style="color: var(--color-texto);">Inicio</a>
+    <a href="#seccion-ofertas" onclick="cerrarMenu()" class="text-xl" style="color: var(--color-texto);">Ofertas</a>
+    <a href="#productos" onclick="cerrarMenu()" class="text-xl" style="color: var(--color-texto);">Productos</a>
+    <a href="#nosotros" onclick="cerrarMenu()" class="text-xl" style="color: var(--color-texto);">Nosotros</a>
+    <a href="#contacto" onclick="cerrarMenu()" class="text-xl" style="color: var(--color-texto);">Contacto</a>
+  </div>
 
   <!-- LOGO FLOTANTE (siempre visible, lleva al inicio) -->
   <a href="#inicio" id="logo-flotante"
-     class="fixed top-2 left-6 z-[60] transition hover:opacity-90"
+     class="fixed top-2 left-4 sm:left-6 z-[60] transition hover:opacity-90"
      style="filter: drop-shadow(0 4px 10px rgba(74,63,53,0.35));">
-    <img src="assets/logo.png" alt="Indalo — Ir al inicio" class="h-20">
+    <img src="assets/logo.png" alt="Indalo — Ir al inicio" class="h-14 sm:h-20">
   </a>
 
   <!-- Espacio para que el contenido no quede tapado por la barra fija -->
-  <div style="height: 96px;"></div>
+  <div style="height: 80px;"></div>
 
   <!-- ===================== -->
   <!-- HERO DE INICIO        -->
@@ -374,7 +396,7 @@
 
     <div id="carrito-items" class="flex-grow overflow-y-auto"></div>
 
-<div class="border-t border-[#D4C3A8] pt-4 mt-4">
+    <div class="border-t border-[#D4C3A8] pt-4 mt-4">
 
       <!-- CÁLCULO DE ENVÍO -->
       <div class="mb-4">
@@ -428,6 +450,16 @@
     function cerrarCarrito() {
       document.getElementById("carrito-panel").classList.add("translate-x-full");
       document.getElementById("carrito-overlay").classList.add("hidden");
+    }
+
+    // --- Menú hamburguesa (celular) ---
+    function abrirMenu() {
+      document.getElementById("menu-movil").classList.remove("translate-x-full");
+      document.getElementById("menu-movil-overlay").classList.remove("hidden");
+    }
+    function cerrarMenu() {
+      document.getElementById("menu-movil").classList.add("translate-x-full");
+      document.getElementById("menu-movil-overlay").classList.add("hidden");
     }
 
     function enviarContacto() {
